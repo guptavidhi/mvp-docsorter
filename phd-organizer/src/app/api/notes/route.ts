@@ -10,17 +10,22 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
  * GET /api/notes
  * Fetch all notes
  */
-export async function GET() {
-  const { data, error } = await supabase
+export async function GET() {const { data, error } = await supabase
     .from("notes")
-    .select("id, title, content")
+    .select("id, title, content, created_at")    // <-- include created_at
     .order("created_at", { ascending: false });
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  return NextResponse.json(data ?? [], { status: 200 });
+  // Normalize created_at so client always receives an ISO string or null
+  const normalized = (data ?? []).map((row: any) => ({
+    ...row,
+    created_at: row.created_at ? new Date(row.created_at).toISOString() : null,
+  }));
+
+  return NextResponse.json(normalized, { status: 200 });
 }
 
 /**
