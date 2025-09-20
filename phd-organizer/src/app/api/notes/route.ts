@@ -12,14 +12,14 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
  */
 export async function GET() {const { data, error } = await supabase
     .from("notes")
-    .select("id, title, content, created_at")    // <-- include created_at
-    .order("created_at", { ascending: false });
+    .select("id, title, content, created_at")
+    .order("created_at", { ascending: false }) // newest first
+    .limit(5); // <-- only the last 5 notes
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  // Normalize created_at so client always receives an ISO string or null
   const normalized = (data ?? []).map((row: any) => ({
     ...row,
     created_at: row.created_at ? new Date(row.created_at).toISOString() : null,
