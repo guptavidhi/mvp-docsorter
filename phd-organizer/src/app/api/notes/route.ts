@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
 'use server';
 import { supabase } from "@/lib/supabaseClient";
 
