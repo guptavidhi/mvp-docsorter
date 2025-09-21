@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-
 "use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -11,10 +10,18 @@ export default function Home() {
   const [notes, setNotes] = useState<any[]>([]);
 
   async function saveNote() {
-    await axios.post("/api/notes", { title, content });
-    setTitle("");
-    setContent("");
-    fetchNotes();
+    try {
+      const res = await axios.post("/api/notes", { title, content });
+      if (res.status === 200) {
+        alert("Note saved!"); // ✅ Show popup
+        setTitle("");
+        setContent("");
+        fetchNotes();
+      }
+    } catch (err) {
+      console.error("Error saving note:", err);
+      alert("Failed to save note.");
+    }
   }
 
   async function fetchNotes() {
@@ -60,7 +67,9 @@ export default function Home() {
             <h3 className="font-bold">{note.title}</h3>
             <p>{note.content}</p>
             <p className="text-sm text-gray-500">
-              {new Date(note.created_at).toLocaleString()}
+              {note.created_at
+                ? new Date(note.created_at).toLocaleString()
+                : "No date"}
             </p>
           </div>
         ))}
