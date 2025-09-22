@@ -11,6 +11,7 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
+
   {
     ignores: [
       "node_modules/**",
@@ -20,7 +21,7 @@ const eslintConfig = [
       "next-env.d.ts",
     ],
     rules: {
-      // 👇 Disable the no-explicit-any rule
+      // 👇 completely disable the "no-explicit-any" rule
       "@typescript-eslint/no-explicit-any": "off",
     },
   },
