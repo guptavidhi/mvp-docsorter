@@ -1,79 +1,33 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-"use client";
-import { useState, useEffect } from "react";
-import axios from "axios";
+import Link from "next/link";
 
 export default function Home() {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [notes, setNotes] = useState<any[]>([]);
-
-  async function saveNote() {
-    try {
-      const res = await axios.post("/api/notes", { title, content });
-      if (res.status === 200) {
-        alert("Note saved!"); // ✅ Show popup
-        setTitle("");
-        setContent("");
-        fetchNotes();
-      }
-    } catch (err) {
-      console.error("Error saving note:", err);
-      alert("Failed to save note.");
-    }
-  }
-
-  async function fetchNotes() {
-    try {
-      const res = await axios.get("/api/notes");
-      setNotes(res.data || []);
-    } catch (err) {
-      console.error("Error fetching notes:", err);
-    }
-  }
-
-  useEffect(() => {
-    fetchNotes();
-  }, []);
-
   return (
     <div className="p-6">
-      <h1 className="text-xl font-bold">PhD Organizer</h1>
-
-      {/* Form */}
-      <input
-        className="border p-2 w-full my-2"
-        placeholder="Note Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
-      <textarea
-        className="border p-2 w-full my-2"
-        placeholder="Note Content"
-        rows={6}
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-      />
-      <button onClick={saveNote} className="bg-blue-500 text-white px-4 py-2">
-        Save Note
-      </button>
-
-      {/* Notes List */}
-      <div className="mt-6">
-        <h2 className="text-lg font-semibold">Saved Notes</h2>
-        {notes.map((note) => (
-          <div key={note.id} className="border p-4 my-2 rounded">
-            <h3 className="font-bold">{note.title}</h3>
-            <p>{note.content}</p>
-            <p className="text-sm text-gray-500">
-              {note.created_at
-                ? new Date(note.created_at).toLocaleString()
-                : "No date"}
-            </p>
-          </div>
-        ))}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+        <HomeCard href="/front-matter" title="Front Matter" description="Title page, Abstract, Acknowledgments, Table of contents" />
+        <HomeCard href="/core-chapters" title="Core Chapters" description="Introductions, Literature review, Methodology, Results, Discussion, Conclusion" />
+        <HomeCard href="/back-matter" title="Back Matter" description="References (Bibliography), Appendices" />
       </div>
     </div>
+  );
+}
+
+function HomeCard({ href, title, description }: { href: string; title: string; description: string }) {
+  return (
+    <Link
+      href={href}
+      className="group block rounded-xl border p-6 md:p-8 h-40 md:h-56"
+      style={{
+        background: "var(--surface)",
+        borderColor: "var(--border)",
+        boxShadow: "0 4px 20px rgba(0,0,0,0.06)",
+      }}
+    >
+      <div className="flex h-full flex-col justify-between">
+        <h2 className="text-xl md:text-2xl font-semibold" style={{ color: "var(--foreground)" }}>{title}</h2>
+        <p className="text-sm opacity-80">{description}</p>
+        <span className="text-sm opacity-70">Open →</span>
+      </div>
+    </Link>
   );
 }
