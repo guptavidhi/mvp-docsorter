@@ -3,6 +3,31 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --surface: #ffffff;
+  --border: #e5e7eb; /* gray-200 */
+  --hover-bg: #f3f4f6; /* gray-100 */
+}
+
+html { color-scheme: light; }
+
+/* Enable class-based dark mode (in addition to system) */
+html.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --surface: #0c0c0c;
+  --border: #262626; /* neutral-800 */
+  --hover-bg: #1a1a1a; /* neutral-850-ish */
+  color-scheme: dark;
+}
+
+/* Force light theme explicitly when set, overriding system preference */
+html.light {
+  --background: #ffffff;
+  --foreground: #171717;
+  --surface: #ffffff;
+  --border: #e5e7eb;
+  --hover-bg: #f3f4f6;
+  color-scheme: light;
 }
 
 @theme inline {
@@ -16,7 +41,16 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --surface: #0c0c0c;
+    --border: #262626;
+    --hover-bg: #1a1a1a;
   }
+}
+
+/* Ensure manual dark mode wins regardless of system setting */
+html.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
 }
 
 body {
