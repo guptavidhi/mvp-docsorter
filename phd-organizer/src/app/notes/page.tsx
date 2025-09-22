@@ -3,7 +3,6 @@
 "use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import Breadcrumbs from "../components/Breadcrumbs";
 
 export default function NotesPage() {
   const [title, setTitle] = useState("");
@@ -40,7 +39,6 @@ export default function NotesPage() {
 
   return (
     <div className="p-6">
-      <Breadcrumbs />
       <h1 className="text-xl font-bold">Notes</h1>
 
       {/* Form */}
